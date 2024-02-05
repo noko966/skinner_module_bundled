@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+
+  <script src="dist/skinnerjs.bundle.js?123"></script>
+
+  <script>
+    let config = {
+      body: {
+        Background: {
+          color: "#222222",
+          isActive: true,
+          isDark: false,
+        },
+        Text: {
+          color: "#ffffff",
+        },
+      },
+      accent: {
+        Background: {
+          color: "#4173a6",
+          isActive: true,
+        },
+        Text: {
+          color: "#fff",
+        },
+      },
+      brand: {
+        Background: {
+          color: "#ff5000",
+          isActive: true,
+        },
+        Text: {
+          color: "#fff",
+        },
+      },
+    };
+
+    let skinnerInstance = new Skinner(config, null, null);
+
+    skinnerInstance.init();
+  </script>
+</html>
