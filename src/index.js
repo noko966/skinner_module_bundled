@@ -779,7 +779,7 @@ class Skinner {
 
       const grpAccent = document.createElement("div");
       grpAccent.className = "sk_ui_essence_row_group";
-      const chbAccent = self.createCheckbox(node, "Accent", "isActive");
+      const chbAccent = self.createCheckbox(node, "Accent", "isActive", true);
       const pickerAccent = self.createPicker(node, "Accent", "color");
       const pickerAccent2 = self.createPicker(node, "Accent", "color2");
 
@@ -789,7 +789,7 @@ class Skinner {
 
       const grpText = document.createElement("div");
       grpText.className = "sk_ui_essence_row_group";
-      const chbText = self.createCheckbox(node, "Text", "isActive");
+      const chbText = self.createCheckbox(node, "Text", "isActive", true);
       const pickerText = self.createPicker(node, "Text", "color");
 
       grpText.appendChild(chbText);
@@ -801,6 +801,9 @@ class Skinner {
       row.appendChild(grpText);
 
       node.controls = {};
+
+      node.controls.Row = row;
+
       node.controls.Background = {};
       node.controls.Background.isActive = chbBg;
       node.controls.Background.color = pickerBg.imitator;
@@ -840,8 +843,9 @@ class Skinner {
     node.controls.Accent.color2.style.background = node.cfg.Accent.color2;
     node.controls.Text.color.style.background = node.cfg.Text.color;
     if (node.cfg.Background.isActive) {
+      node.controls.Row.className = 'sk_ui_essence_row_active sk_ui_essence_row';
       node.controls.Background.color.style.background =
-        node.cfg.Background.color;
+      node.cfg.Background.color;
       node.controls.Background.color.style.opacity = "1";
       node.controls.Background.color.style.filter = "";
       node.controls.Background.color.style.pointerEvents = "";
@@ -879,11 +883,11 @@ class Skinner {
         node.controls.Text.color.style.pointerEvents = "none";
       }
     } else {
+      node.controls.Row.className = 'sk_ui_essence_row';
       node.controls.Background.color.style.opacity = opacity;
       node.controls.Background.color.style.filter = filter;
       node.controls.Background.color.style.pointerEvents = "none";
       node.controls.Background.isDark.style.opacity = opacity;
-      node.controls.Background.isDark.style.filter = filter;
       node.controls.Background.isDark.style.pointerEvents = "none";
 
       node.controls.Accent.color.style.opacity = opacity;
@@ -893,14 +897,12 @@ class Skinner {
       node.controls.Accent.color2.style.filter = filter;
       node.controls.Accent.color2.style.pointerEvents = "none";
       node.controls.Accent.isActive.style.opacity = opacity;
-      node.controls.Accent.isActive.style.filter = filter;
       node.controls.Accent.isActive.style.pointerEvents = "none";
 
       node.controls.Text.color.style.opacity = opacity;
       node.controls.Text.color.style.filter = filter;
       node.controls.Text.color.style.pointerEvents = "none";
       node.controls.Text.isActive.style.opacity = opacity;
-      node.controls.Text.isActive.style.filter = filter;
       node.controls.Text.isActive.style.pointerEvents = "none";
     }
   }
@@ -1119,17 +1121,12 @@ class Skinner {
       }
 
       .sk_ui_wrapper::-webkit-scrollbar-thumb {
-        background: linear-gradient(
-          to bottom right,
-          var(--sk_ui_body_bg) 0%,
-          var(--sk_ui_body_bg2) 100%
-        );
+        background: #fefdf2;
         border-radius: 5px;
       }
 
       .sk_ui_wrapper::-webkit-scrollbar-track {
-        background-color: var(--sk_ui_body_bg2);
-        border: 1px solid var(--sk_ui_body_bg);
+        background-color: #07070c;
       }
 
       .sk_ui_picker_action {
@@ -1158,17 +1155,24 @@ class Skinner {
     padding: 0 10px;
     margin-bottom: 10px;
     display: grid;
-    grid-template-columns: 110px repeat(3, 1fr);
+    grid-template-columns: 110px 120px 120px 84px;
+    gap: 8px;
     align-content: center;
     border-radius: 10px;
     height: 40px;
+    opacity: 0.4;
+    transition: opacity 0.2s;
+      }
+
+      .sk_ui_essence_row_active{
+        opacity: 1;
       }
 
       .sk_ui_essence_row_group {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0 8px;
+        
       }
 
       .sk_ui_header {
@@ -1179,7 +1183,8 @@ class Skinner {
         border-top-left-radius: 30px;
         border-top-right-radius: 30px;
         display: grid;
-        grid-template-columns: 110px repeat(3, 1fr);
+        grid-template-columns: 110px 120px 120px 84px;
+        gap: 8px;
         align-content: center;
       }
 
@@ -1201,13 +1206,13 @@ class Skinner {
     }
 
     .sk_ui_action_first .sk_ui_action_mock{
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
     }
 
     .sk_ui_action_last .sk_ui_action_mock {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
     }
       .sk_ui_action_mock::before {
         position: absolute;
@@ -1344,7 +1349,7 @@ class Skinner {
         flex-direction: column;
         z-index: 10000;
         border-radius: 0.1em;
-        background: var(--sk_ui_body_bg);
+        background: #07070c;
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.3s, visibility 0s 0.3s;
@@ -1448,14 +1453,15 @@ class Skinner {
           0 0 0 3px rgba(66, 133, 244, 0.75);
       }
       .pcr-app .pcr-interaction .pcr-result {
-        color: #75797e;
-        text-align: left;
-        flex: 1 1 8em;
-        min-width: 8em;
-        transition: all 0.2s;
-        border-radius: 0.15em;
-        background: var(--sk_ui_body_bg2);
-        cursor: text;
+        color: #07070c;
+    text-align: left;
+    flex: 1 1 8em;
+    min-width: 8em;
+    transition: all 0.2s;
+    border-radius: 0.15em;
+    background: #fefdf2;
+    cursor: text;
+    height: 34px;
       }
       .pcr-app .pcr-interaction .pcr-result::-moz-selection {
         background: #4285f4;
@@ -1528,7 +1534,8 @@ class Skinner {
       .pcr-app[data-theme="classic"] {
         width: 28.5em;
         max-width: 95vw;
-        padding: 0.8em;
+        padding: 23px;
+        border-radius: 15px;
       }
       .pcr-app[data-theme="classic"] .pcr-selection {
         display: flex;
