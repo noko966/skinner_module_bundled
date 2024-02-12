@@ -252,12 +252,12 @@ class Skinner {
       .skinner_HTML_box > div:nth-child(2){
         font-size: 0.9em;
         font-weight: 400;
-  
+
       }
       .skinner_HTML_box > div:nth-child(3){
         font-size: 0.8em;
         font-weight: 400;
-  
+
       }
       .skinner_HTML_box:first-child{
         border-top-left-radius: 8px;
@@ -271,7 +271,7 @@ class Skinner {
 
 
 
-      
+
       `;
 
     // Create a style element
@@ -770,7 +770,7 @@ class Skinner {
       nameEl.className = "sk_ui_essence_row_name";
       const grpBg = document.createElement("div");
       grpBg.className = "sk_ui_essence_row_group";
-      const chbBg = self.createCheckbox(node, "Background", "isActive");
+      const chbBg = self.createCheckbox(node, "Background", "isActive", true);
       const pickerBg = self.createPicker(node, "Background", "color");
       const chbDark = self.createCheckbox(node, "Background", "isDark");
       grpBg.appendChild(chbBg);
@@ -832,6 +832,8 @@ class Skinner {
   }
 
   updateControl(node) {
+    const opacity = "0.2";
+    const filter = "grayscale(0.8)";
     const vd = this.verbalData(node.name);
     node.controls.Background.color.style.background = node.cfg.Background.color;
     node.controls.Accent.color.style.background = node.cfg.Accent.color;
@@ -841,6 +843,7 @@ class Skinner {
       node.controls.Background.color.style.background =
         node.cfg.Background.color;
       node.controls.Background.color.style.opacity = "1";
+      node.controls.Background.color.style.filter = "";
       node.controls.Background.color.style.pointerEvents = "";
       node.controls.Background.isDark.style.opacity = "1";
       node.controls.Background.isDark.style.pointerEvents = "";
@@ -852,39 +855,52 @@ class Skinner {
 
       if (node.cfg.Accent.isActive) {
         node.controls.Accent.color.style.opacity = "1";
+        node.controls.Accent.color.style.filter = "";
         node.controls.Accent.color.style.pointerEvents = "";
         node.controls.Accent.color2.style.opacity = "1";
+        node.controls.Accent.color2.style.filter = "";
         node.controls.Accent.color2.style.pointerEvents = "";
       } else {
-        node.controls.Accent.color.style.opacity = "0.2";
+        node.controls.Accent.color.style.opacity = opacity;
+        node.controls.Accent.color.style.filter = filter;
         node.controls.Accent.color.style.pointerEvents = "none";
-        node.controls.Accent.color2.style.opacity = "0.2";
+        node.controls.Accent.color2.style.opacity = opacity;
+        node.controls.Accent.color2.style.filter = filter;
         node.controls.Accent.color2.style.pointerEvents = "none";
       }
 
       if (node.cfg.Text.isActive) {
         node.controls.Text.color.style.opacity = "1";
+        node.controls.Text.color.style.filter = "";
         node.controls.Text.color.style.pointerEvents = "";
       } else {
-        node.controls.Text.color.style.opacity = "0.2";
+        node.controls.Text.color.style.opacity = opacity;
+        node.controls.Text.color.style.filter = filter;
         node.controls.Text.color.style.pointerEvents = "none";
       }
     } else {
-      node.controls.Background.color.style.opacity = "0.2";
+      node.controls.Background.color.style.opacity = opacity;
+      node.controls.Background.color.style.filter = filter;
       node.controls.Background.color.style.pointerEvents = "none";
-      node.controls.Background.isDark.style.opacity = "0.2";
+      node.controls.Background.isDark.style.opacity = opacity;
+      node.controls.Background.isDark.style.filter = filter;
       node.controls.Background.isDark.style.pointerEvents = "none";
 
-      node.controls.Accent.color.style.opacity = "0.2";
+      node.controls.Accent.color.style.opacity = opacity;
+      node.controls.Accent.color.style.filter = filter;
       node.controls.Accent.color.style.pointerEvents = "none";
-      node.controls.Accent.color2.style.opacity = "0.2";
+      node.controls.Accent.color2.style.opacity = opacity;
+      node.controls.Accent.color2.style.filter = filter;
       node.controls.Accent.color2.style.pointerEvents = "none";
-      node.controls.Accent.isActive.style.opacity = "0.2";
+      node.controls.Accent.isActive.style.opacity = opacity;
+      node.controls.Accent.isActive.style.filter = filter;
       node.controls.Accent.isActive.style.pointerEvents = "none";
 
-      node.controls.Text.color.style.opacity = "0.2";
+      node.controls.Text.color.style.opacity = opacity;
+      node.controls.Text.color.style.filter = filter;
       node.controls.Text.color.style.pointerEvents = "none";
-      node.controls.Text.isActive.style.opacity = "0.2";
+      node.controls.Text.isActive.style.opacity = opacity;
+      node.controls.Text.isActive.style.filter = filter;
       node.controls.Text.isActive.style.pointerEvents = "none";
     }
   }
@@ -918,7 +934,8 @@ class Skinner {
     return false;
   }
 
-  createCheckbox(node, grp, key) {
+  createCheckbox(node, grp, key, first) {
+    const f = first || false;
     const self = this;
     const chbWrapper = document.createElement("label");
     const chb = document.createElement("input");
@@ -930,7 +947,9 @@ class Skinner {
     chb.checked = node.cfg[grp][key];
     const chbMock = document.createElement("div");
     chbMock.className = "sk_ui_action_mock";
-    chbWrapper.className = "sk_ui_action";
+    chbWrapper.className = `sk_ui_action ${
+      f ? "sk_ui_action_first" : "sk_ui_action_last"
+    }`;
     chbWrapper.appendChild(chb);
     chbWrapper.appendChild(chbMock);
 
@@ -1008,12 +1027,12 @@ class Skinner {
     styles += `.tree {
         line-height: 1.5;
       }
-  
+
       .node {
         margin-left: 20px;
         position: relative;
       }
-  
+
       .node::before {
         content: "";
         width: 20px;
@@ -1023,7 +1042,7 @@ class Skinner {
         top: 0;
         bottom: 0;
       }
-  
+
       .node::after {
         content: "";
         width: 20px;
@@ -1032,19 +1051,19 @@ class Skinner {
         left: -20px;
         top: 0;
       }
-  
+
       .children {
         margin-top: 5px;
       }
-  
+
       .children .node:last-child::before {
         height: 50%;
       }
-  
+
       .children .node:first-child::before {
         top: 50%;
       }
-  
+
       :root {
         --sk_ui_body_bg: ${this.UIColors.sk_ui_body_bg};
         --sk_ui_body_bg2: ${this.UIColors.sk_ui_body_bg2};
@@ -1055,19 +1074,19 @@ class Skinner {
         --sk_ui_accent_txt: ${this.UIColors.sk_ui_accent_txt};
         --sk_ui_body_bg_light: ${this.UIColors.sk_ui_body_bg_light};
       }
-  
+
       .sk_ui_action {
-        width: 40px;
+        width: 30px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
       }
-  
+
       .sk_ui_chb_hide {
         display: none;
       }
-  
+
       .sk_ui_root {
         position: fixed;
         left: 50%;
@@ -1076,28 +1095,29 @@ class Skinner {
         z-index: 9999;
         width: 800px;
         height: 300px;
-        border-radius: 12px 12px 0px 0px;
+        border-radius: 30px 30px 0px 0px;
         box-shadow: 0px 1px 61px 20px rgba(0, 0, 0, 0.5);
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
       }
-  
+
       .sk_ui_wrapper {
         overflow-y: auto;
         height: calc(100% - 32px);
-        background: var(--sk_ui_body_bg);
-        color: var(--sk_ui_txt);
+        background: #07070c;
+        color: #fefdf2;
+        padding: 0 30px;
       }
-  
+
       .sk_ui_wrapper {
         scrollbar-width: auto;
         scrollbar-color: auto;
       }
-  
+
       .sk_ui_wrapper::-webkit-scrollbar {
         width: 6px;
         height: 6px;
       }
-  
+
       .sk_ui_wrapper::-webkit-scrollbar-thumb {
         background: linear-gradient(
           to bottom right,
@@ -1106,117 +1126,127 @@ class Skinner {
         );
         border-radius: 5px;
       }
-  
+
       .sk_ui_wrapper::-webkit-scrollbar-track {
         background-color: var(--sk_ui_body_bg2);
         border: 1px solid var(--sk_ui_body_bg);
       }
-  
+
       .sk_ui_picker_action {
-        width: 42px;
-        height: 42px;
-        box-shadow: inset 0px 0px 0px 2px white;
+        width: 30px;
+        height: 30px;
+        /* box-shadow: inset 0px 0px 0px 2px white; */
         font-size: 16px;
         font-weight: 500;
-        border-radius: 50%;
+        border-radius: 0;
         opacity: 1;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
+        border-radius: 3px;
       }
-  
+
       .sk_ui_picker_wrapper .pickr {
         visibility: hidden;
         width: 0px;
         height: 0px;
       }
-  
+
       .sk_ui_essence_row {
-        background: var(--sk_ui_body_bg);
-        padding: 4px 12px;
-        border-bottom: 1px solid var(--sk_ui_body_bg2);
-        display: grid;
-        grid-template-columns: 100px 174px 174px 140px 140px;
-        align-content: center;
+        background: #fefdf2;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 110px repeat(3, 1fr);
+    align-content: center;
+    border-radius: 10px;
+    height: 40px;
       }
-  
+
       .sk_ui_essence_row_group {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 6px;
-        border-right: 1px solid var(--sk_ui_body_bg2);
-        border-left: 1px solid var(--sk_ui_body_bg3);
+        padding: 0 8px;
       }
-  
+
       .sk_ui_header {
-        background: var(--sk_ui_body_bg2);
-        color: var(--sk_ui_body_txt);
-        padding: 4px 12px;
-        height: 32px;
-        border-top-left-radius: 6px;
-        border-top-right-radius: 6px;
+        background: #07070c;
+        color: #fefdf2;
+        padding: 4px 42px;
+        height: 50px;
+        border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
         display: grid;
-        grid-template-columns: 100px 174px 174px 140px 140px;
+        grid-template-columns: 110px repeat(3, 1fr);
         align-content: center;
       }
-  
+
       .sk_ui_picker_wrapper {
         position: relative;
-        margin: 0 12px;
+        margin: 0 4px;
       }
-  
+
       .sk_ui_action_mock {
-        width: 38px;
-        height: 28px;
-        background: var(--sk_ui_body_bg);
-        box-shadow: inset 0px 0px 0px 1px rgba(255, 255, 255, 0.3),
-          3px 5px 20px rgba(0, 0, 0, 0.2);
-        border-radius: 8px;
+        width: 30px;
+        height: 30px;
+        background: #d8d8d8;
+        /* box-shadow: inset 0px 0px 0px 1px rgba(255, 255, 255, 0.3), 3px 5px 20px rgba(0, 0, 0, 0.2); */
+        border-radius: 15px;
         transition: all 0.2s ease;
         position: relative;
         cursor: pointer;
-      }
-  
+        
+    }
+
+    .sk_ui_action_first .sk_ui_action_mock{
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .sk_ui_action_last .sk_ui_action_mock {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
       .sk_ui_action_mock::before {
         position: absolute;
         content: "";
-        width: 19px;
-        height: 24px;
+        width: 10px;
+        height: 10px;
         background: white;
-        border-radius: 6px;
-        top: 2px;
-        left: 2px;
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
         transition: all 0.4s cubic-bezier(0.99, 0.01, 0.29, 1.24);
-        transform: translateX(0px);
-        box-shadow: 1px 1px 7px rgba(52, 53, 73, 0.4),
-          inset 3px 2px 5px rgba(69, 70, 96, 0.3);
+        transform: translate(-50%, -50%);
+        /*box-shadow: 1px 1px 7px rgba(52, 53, 73, 0.4),
+          inset 3px 2px 5px rgba(69, 70, 96, 0.3);*/
       }
-  
+
       .sk_ui_chb_hide:checked + .sk_ui_action_mock {
         background: var(--sk_ui_accent_bg);
       }
-  
+
       .sk_ui_chb_hide:checked + .sk_ui_action_mock::before {
-        transform: translateX(20px);
+        /* transform: translateX(15px); */
       }
-  
+
       .sk_ui_essence_row_name {
-        color: var(--sk_ui_body_txt);
-        font-size: 13px;
-        font-weight: 500;
-        text-transform: capitalize;
-        align-self: center;
+        color: #06060b;
+    font-size: 17px;
+    font-weight: 500;
+    text-transform: capitalize;
+    align-self: center;
       }
-  
+
       .sk_ui_header_title {
         justify-self: center;
-        font-size: 13px;
+        font-size: 15px;
         font-weight: 500;
-        color: var(--sk_ui_body_txt2);
+        color: #fefdf2;
       }
-      
+
       .pickr {
         position: relative;
         overflow: visible;
@@ -1237,7 +1267,7 @@ class Skinner {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
           "Helvetica Neue", Arial, sans-serif;
         border-radius: 0.15em;
-        
+
           no-repeat center;
         background-size: 0;
         transition: all 0.3s;
@@ -1366,7 +1396,7 @@ class Skinner {
         left: 0;
         width: 100%;
         height: 100%;
-        
+
         background-size: 6px;
         border-radius: 0.15em;
         z-index: -1;
@@ -1521,7 +1551,7 @@ class Skinner {
         left: 0;
         width: 100%;
         height: 100%;
-        
+
         background-size: 0.5em;
         border-radius: 0.15em;
         z-index: -1;
@@ -1571,7 +1601,7 @@ class Skinner {
         left: 0;
         width: 100%;
         height: 100%;
-        
+
         background-size: 0.5em;
         border-radius: 0.15em;
         z-index: -1;
@@ -1604,10 +1634,10 @@ class Skinner {
         );
       }
       .pcr-app[data-theme="classic"] .pcr-selection .pcr-color-opacity .pcr-slider {
-        
+
         background-size: 100%, 50%;
       }
-      
+
       `;
 
     style.textContent = styles;
