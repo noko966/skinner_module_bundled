@@ -8,6 +8,17 @@ module.exports = {
     library: "SkinnerJs",
     libraryTarget: "umd",
   },
-
   mode: "production",
+  performance: {
+    hints: false, // Disable performance hints
+    maxEntrypointSize: 512000, // Adjust entry point size limit (in bytes)
+    maxAssetSize: 512000, // Adjust asset size limit (in bytes)
+  },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, "dist"),
+    },
+    compress: true,
+    port: 9000,
+  },
 };

@@ -207,18 +207,24 @@ class Skinner {
       * {
         box-sizing: border-box;
       }
+      :root{
+        --skinnerBg: #fefdf2;
+        --skinnerTxt: #06060b;
+      }
       .skinner_HTML_root{
         background: var(--bodyBg);
         height: 100vh;
         overflow-y: auto;
+        display: flex;
+        justify-content: center;
       }
       .skinner_HTML_container {
         display: grid;
-        grid-template-columns: repeat(6, minmax(0, 1fr));
-        grid-template-rows: repeat(3, 1fr);
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         grid-gap: 8px;
         padding: 8px;
         font-family: 'Nunito Sans', sans-serif;
+        width: 66.6vw;
       }
       .skinner_HTML_box_heading{
         font-size: 1.8em;
@@ -228,8 +234,13 @@ class Skinner {
         padding: 0 16px;
       }
       .skinner_HTML_box_container{
-        padding: 16px;
+        padding: 12px 16px;
         border-radius: 12px;
+        box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-direction: column;
+        row-gap: 4px;
+        background: #fefdf2;
       }
       .skinner_HTML_box {
         padding: 8px 12px;
@@ -306,13 +317,15 @@ class Skinner {
 
       let essenceContainer = document.createElement("div");
       essenceContainer.className = "skinner_HTML_box_container";
-      essenceContainer.style.background = `var(--${vd["nameBg"]})`;
+      essenceContainer.style.background = `var(--skinnerBg)`;
+      // essenceContainer.style.color = `var(--${vd["skinnerTxt"]})`;
+      essenceContainer.style.color = `var(--skinnerTxt)`;
       essenceContainer.style.border = `2px solid var(--${vd["nameBg3"]})`;
       container.appendChild(essenceContainer);
 
       let essenceHeading = document.createElement("div");
       essenceHeading.className = "skinner_HTML_box_heading";
-      essenceHeading.style.color = `var(--${vd["nameTxt"]})`;
+      // essenceHeading.style.color = `var(--${vd["nameTxt"]})`;
       essenceHeading.innerText = `${vd["name"]}`;
       essenceContainer.appendChild(essenceHeading);
 
@@ -641,6 +654,21 @@ class Skinner {
     });
   }
 
+  applyContrastShift(color, contrastShift) {
+    let tc = this.TC;
+    let c = tinycolor(color);
+    let hsl = c.toHsl();
+
+    // Normalize contrastShift to a scale of -1 to 1
+    let shift = contrastShift / 100;
+
+    // Adjust the luminance
+    hsl.l = Math.max(0, Math.min(1, hsl.l + shift));
+
+    // Return the new color
+    return tc(hsl).toHexString();
+  }
+
   makeBackgrounds(node) {
     let tc = this.TC;
     let cfg = node.cfg;
@@ -660,14 +688,20 @@ class Skinner {
       this.skin[vd.nameBg] = tc(bgParent).toHexString();
       this.skin[vd.nameBg1] = tc(bgParent).toHexString();
     }
-    for (let i = 2; i < tintsCount; i++) {
+    // for (let i = 2; i < tintsCount; i++) {
+    //   this.skin[vd[`nameBg${i}`]] = isDark
+    //     ? tc(this.skin[vd[`nameBg${i - 1}`]])
+    //         .darken(this.defaults.dark.step)
+    //         .toHexString()
+    //     : tc(this.skin[vd[`nameBg${i - 1}`]])
+    //         .lighten(this.defaults.light.step)
+    //         .toHexString();
+    // }
+    for (let i = 1; i < tintsCount; i++) {
+      let fraction = 0;
       this.skin[vd[`nameBg${i}`]] = isDark
-        ? tc(this.skin[vd[`nameBg${i - 1}`]])
-            .darken(this.defaults.dark.step)
-            .toHexString()
-        : tc(this.skin[vd[`nameBg${i - 1}`]])
-            .lighten(this.defaults.light.step)
-            .toHexString();
+        ? this.applyContrastShift(this.skin[vd[`nameBg${i - 1}`]], fraction)
+        : this.applyContrastShift(this.skin[vd[`nameBg${i - 1}`]], fraction);
     }
   }
 
@@ -843,9 +877,10 @@ class Skinner {
     node.controls.Accent.color2.style.background = node.cfg.Accent.color2;
     node.controls.Text.color.style.background = node.cfg.Text.color;
     if (node.cfg.Background.isActive) {
-      node.controls.Row.className = 'sk_ui_essence_row_active sk_ui_essence_row';
+      node.controls.Row.className =
+        "sk_ui_essence_row_active sk_ui_essence_row";
       node.controls.Background.color.style.background =
-      node.cfg.Background.color;
+        node.cfg.Background.color;
       node.controls.Background.color.style.opacity = "1";
       node.controls.Background.color.style.filter = "";
       node.controls.Background.color.style.pointerEvents = "";
@@ -883,7 +918,7 @@ class Skinner {
         node.controls.Text.color.style.pointerEvents = "none";
       }
     } else {
-      node.controls.Row.className = 'sk_ui_essence_row';
+      node.controls.Row.className = "sk_ui_essence_row";
       node.controls.Background.color.style.opacity = opacity;
       node.controls.Background.color.style.filter = filter;
       node.controls.Background.color.style.pointerEvents = "none";
@@ -1151,7 +1186,8 @@ class Skinner {
       }
 
       .sk_ui_essence_row {
-        background: #fefdf2;
+        background: var(--skinnerBg);
+        color: var(--skinnerTxt);
     padding: 0 10px;
     margin-bottom: 10px;
     display: grid;
